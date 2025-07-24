@@ -127,8 +127,14 @@ export const UserProfile = ({ onProfileComplete, language }: UserProfileProps) =
     const savedUser = await createUser({
       name: profile.name,
       age: parseInt(profile.age) || 0,
+      email: profile.email || '',
+      phoneNumber: profile.phone || '',
+      region: profile.region || '',
       income: 0, // Default income - you can collect this in your form later
-      goals: profile.financialGoals.join(', '),
+      clientProfile: profile.clientType,
+      accessibilityNeeds: profile.accessibilityNeeds,
+      financialGoals: profile.financialGoals,
+      financialExperienceLevel: profile.experience,
       riskTolerance: profile.experience === 'beginner' ? 'low' : profile.experience === 'intermediate' ? 'medium' : 'high',
       language: language
     });

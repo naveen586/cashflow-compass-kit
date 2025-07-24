@@ -2,8 +2,14 @@ export interface UserProfile {
   id: string;
   name: string;
   age: number;
+  email: string;
+  phoneNumber: string;
+  region: string;
   income: number;
-  goals: string;
+  clientProfile: string;
+  accessibilityNeeds: string[];
+  financialGoals: string[];
+  financialExperienceLevel: string;
   riskTolerance: 'low' | 'medium' | 'high';
   language: string;
   createdAt: Date;
@@ -20,8 +26,14 @@ export interface ApiResponse<T> {
 export interface CreateUserRequest {
   name: string;
   age: number;
+  email: string;
+  phoneNumber: string;
+  region: string;
   income: number;
-  goals: string;
+  clientProfile: string;
+  accessibilityNeeds: string[];
+  financialGoals: string[];
+  financialExperienceLevel: string;
   riskTolerance: 'low' | 'medium' | 'high';
   language: string;
 }

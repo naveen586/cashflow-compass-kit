@@ -2,54 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Financial Guidance Chatbot Design System - Trust, Accessibility, Growth */
 
 @layer base {
   :root {
-    --background: 250 50% 98%;
-    --foreground: 215 20% 15%;
+    /* Core brand colors - Trust and stability */
+    --background: 214 32% 98%;
+    --foreground: 215 25% 15%;
 
+    /* Card and surface colors */
     --card: 0 0% 100%;
-    --card-foreground: 215 20% 15%;
+    --card-foreground: 215 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 20% 15%;
+    --popover-foreground: 215 25% 15%;
 
-    --primary: 213 94% 68%;
+    /* Primary - Deep trust blue */
+    --primary: 213 94% 24%;
     --primary-foreground: 0 0% 100%;
+    --primary-light: 213 84% 85%;
 
-    --secondary: 147 64% 95%;
-    --secondary-foreground: 147 100% 20%;
+    /* Secondary - Financial growth green */
+    --secondary: 158 64% 35%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 158 54% 90%;
 
-    --muted: 215 16% 96%;
-    --muted-foreground: 215 16% 46%;
-
-    --accent: 142 71% 45%;
+    /* Accent - Warm approachable orange */
+    --accent: 25 95% 58%;
     --accent-foreground: 0 0% 100%;
+    --accent-light: 25 95% 95%;
 
+    /* Muted colors for subtle elements */
+    --muted: 214 20% 95%;
+    --muted-foreground: 215 15% 55%;
+
+    /* Status colors */
+    --success: 158 64% 35%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 100%;
+    
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 213 94% 68%;
+    /* Accessibility focused borders and inputs */
+    --border: 214 20% 85%;
+    --input: 214 20% 90%;
+    --ring: 213 94% 24%;
 
-    /* Financial app specific colors */
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-    --warning: 45 93% 47%;
-    --warning-foreground: 0 0% 100%;
-    --info: 213 94% 68%;
-    --info-foreground: 0 0% 100%;
-
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(213 94% 68%), hsl(142 71% 45%));
-    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%), hsl(142 71% 55%));
-    --gradient-hero: linear-gradient(135deg, hsl(213 94% 68% / 0.1), hsl(142 71% 45% / 0.1));
-
-    --radius: 0.5rem;
+    /* UI Styling */
+    --radius: 0.75rem;
+    
+    /* Gradients for visual appeal */
+    --gradient-trust: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+    
+    /* Shadows for depth */
+    --shadow-soft: 0 4px 20px hsl(var(--primary) / 0.08);
+    --shadow-medium: 0 8px 30px hsl(var(--primary) / 0.12);
+    --shadow-strong: 0 20px 60px hsl(var(--primary) / 0.15);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 

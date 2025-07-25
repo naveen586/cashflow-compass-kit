@@ -4,21 +4,23 @@ export interface ChatRequest {
   language: string;
 }
 
+export interface ChatResponseItem {
+  id: string;
+  name: string;
+  data: {
+    reply?: string;
+    content?: any;
+    type?: 'text' | 'audio' | 'document' | 'image' | 'table' | 'list' | 'file' | 'html';
+    fileUrl?: string;
+    fileName?: string;
+    mimeType?: string;
+    metadata?: any;
+  };
+}
+
 export interface ChatResponse {
   success: boolean;
-  data?: {
-    id: string;
-    name: string;
-    data: {
-      reply?: string;
-      content?: any;
-      type?: 'text' | 'audio' | 'document' | 'image' | 'table' | 'list' | 'file' | 'html';
-      fileUrl?: string;
-      fileName?: string;
-      mimeType?: string;
-      metadata?: any;
-    };
-  };
+  data?: ChatResponseItem | ChatResponseItem[];
   message?: string;
   error?: string;
 }

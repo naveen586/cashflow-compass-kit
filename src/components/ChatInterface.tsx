@@ -9,6 +9,16 @@ import { Send, Bot, User, Mic, Volume2, VolumeX, Star, Trophy, Download, Play, P
 import { useToast } from '@/hooks/use-toast';
 import { chatService } from '@/services/chatService';
 
+interface MessageItem {
+  id: string;
+  content: string;
+  type?: 'text' | 'audio' | 'document' | 'image' | 'table' | 'list' | 'file' | 'html';
+  fileUrl?: string;
+  fileName?: string;
+  mimeType?: string;
+  metadata?: any;
+}
+
 interface Message {
   id: string;
   content: string;
@@ -19,6 +29,7 @@ interface Message {
   fileName?: string;
   mimeType?: string;
   metadata?: any;
+  items?: MessageItem[]; // For multi-part responses
 }
 
 interface ChatInterfaceProps {
@@ -216,22 +227,51 @@ export const ChatInterface = ({ userProfile, language }: ChatInterfaceProps) => 
       });
 
       if (response.success && response.data) {
-        const responseData = response.data.data;
-        const content = responseData?.reply || responseData?.content || `API Response: Created object with ID ${response.data.id}. Your message "${currentInput}" was sent successfully with your profile data.`;
+        // Handle both single response and array of responses
+        const responseDataArray = Array.isArray(response.data) ? response.data : [response.data];
         
-        const botResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          content: typeof content === 'string' ? content : JSON.stringify(content),
-          sender: 'bot',
-          timestamp: new Date(),
-          type: detectResponseType(responseData),
-          fileUrl: responseData?.fileUrl,
-          fileName: responseData?.fileName,
-          mimeType: responseData?.mimeType,
-          metadata: responseData?.metadata,
-        };
+        if (responseDataArray.length === 1) {
+          // Single response - use existing logic
+          const responseData = responseDataArray[0].data;
+          const content = responseData?.reply || responseData?.content || `API Response: Created object with ID ${responseDataArray[0].id}. Your message "${currentInput}" was sent successfully with your profile data.`;
+          
+          const botResponse: Message = {
+            id: (Date.now() + 1).toString(),
+            content: typeof content === 'string' ? content : JSON.stringify(content),
+            sender: 'bot',
+            timestamp: new Date(),
+            type: detectResponseType(responseData),
+            fileUrl: responseData?.fileUrl,
+            fileName: responseData?.fileName,
+            mimeType: responseData?.mimeType,
+            metadata: responseData?.metadata,
+          };
 
-        setMessages(prev => [...prev, botResponse]);
+          setMessages(prev => [...prev, botResponse]);
+        } else {
+          // Multiple responses - create a multi-part message
+          const items: MessageItem[] = responseDataArray.map((item, index) => ({
+            id: `${Date.now()}-${index}`,
+            content: typeof item.data.reply === 'string' ? item.data.reply : 
+                    typeof item.data.content === 'string' ? item.data.content : 
+                    JSON.stringify(item.data.content || item.data.reply),
+            type: detectResponseType(item.data),
+            fileUrl: item.data.fileUrl,
+            fileName: item.data.fileName,
+            mimeType: item.data.mimeType,
+            metadata: item.data.metadata,
+          }));
+
+          const botResponse: Message = {
+            id: (Date.now() + 1).toString(),
+            content: '', // Will be rendered via items
+            sender: 'bot',
+            timestamp: new Date(),
+            items: items,
+          };
+
+          setMessages(prev => [...prev, botResponse]);
+        }
       } else {
         const errorResponse: Message = {
           id: (Date.now() + 1).toString(),
@@ -282,6 +322,24 @@ export const ChatInterface = ({ userProfile, language }: ChatInterfaceProps) => 
   };
 
   const renderMessageContent = (message: Message) => {
+    // Handle multi-part messages
+    if (message.items && message.items.length > 0) {
+      return (
+        <div className="space-y-3">
+          {message.items.map((item, index) => (
+            <div key={item.id} className="border-l-2 border-primary/20 pl-3">
+              {renderSingleMessageContent(item)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+    
+    // Handle single message
+    return renderSingleMessageContent(message);
+  };
+
+  const renderSingleMessageContent = (message: Message | MessageItem) => {
     switch (message.type) {
       case 'table':
         return renderTableContent(message);
@@ -360,7 +418,7 @@ export const ChatInterface = ({ userProfile, language }: ChatInterfaceProps) => 
     }
   };
 
-  const renderTableContent = (message: Message) => {
+  const renderTableContent = (message: Message | MessageItem) => {
     try {
       let tableData: any;
       
@@ -436,7 +494,7 @@ export const ChatInterface = ({ userProfile, language }: ChatInterfaceProps) => 
     }
   };
 
-  const renderListContent = (message: Message) => {
+  const renderListContent = (message: Message | MessageItem) => {
     try {
       let items: any[] = [];
       

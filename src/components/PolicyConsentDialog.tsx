@@ -267,7 +267,7 @@ export const PolicyConsentDialog = ({
           {/* Privacy Policy Download Link */}
           <div className="flex justify-start">
             <a 
-              href="/Privacy_Policy.pdf" 
+              href="/assets/Privacy_Policy.pdf" 
               download="Privacy_Policy.pdf"
               className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors duration-200 font-medium group"
             >

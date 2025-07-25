@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Shield, User, Target, Globe, Phone, Mail, MapPin, Calendar } from 'lucide-react';
+import { Shield, User, Target, Globe, Phone, Mail, MapPin, Calendar, Download } from 'lucide-react';
 
 interface PolicyConsentDialogProps {
   open: boolean;
@@ -263,6 +263,18 @@ export const PolicyConsentDialog = ({
               </ul>
             </CardContent>
           </Card>
+
+          {/* Privacy Policy Download Link */}
+          <div className="flex justify-start">
+            <a 
+              href="/Privacy_Policy.pdf" 
+              download="Privacy_Policy.pdf"
+              className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors duration-200 font-medium group"
+            >
+              <Download className="h-4 w-4 group-hover:scale-110 transition-transform duration-200" />
+              Download Privacy Policy (PDF)
+            </a>
+          </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
